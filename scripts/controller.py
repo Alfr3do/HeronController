@@ -3,7 +3,7 @@
 #
 
 import rospy
-from std_msgs.msg import  Header
+from std_msgs.msg import  Header, Bool
 from uuv_gazebo_ros_plugins_msgs.msg import FloatStamped
 
 class SimpleController:
@@ -11,8 +11,14 @@ class SimpleController:
     def __init__(self):
 	print('Initializing this');
         self_rate = rospy.Rate(10) #10hz
+	self.thruster_0_on = rospy.Publisher("/heron/thrusters/0/is_on", Bool, queue_size=1)
 	self.thruster_0 = rospy.Publisher("/heron/thrusters/0/input",FloatStamped, queue_size=10)
+	self.thruster_1_on = rospy.Publisher("/heron/thrusters/1/is_on",Bool, queue_size=1)
 	self.thruster_1 = rospy.Publisher("/heron/thrusters/1/input",FloatStamped, queue_size=10)
+
+	self.thruster_0_on.publish(Bool(True))
+	self.thruster_1_on.publish(Bool(True))
+
 	self.timer = rospy.Timer(rospy.Duration(3.0/10.0), self.sendCommand)
 	print(self.timer)
 	cmd = FloatStamped(Header(), 5000)
@@ -20,6 +26,10 @@ class SimpleController:
 	self.thruster_1.publish(cmd)
    
     def __del__(self):
+	self.thruster_0_on.unregister()
+	self.thruster_1_on.unregister()
+	self.thruster_0.unregister()
+	self.thruster_1.unregister()
         self.timer.shutdown()
 
     def sendCommand(self, event):
