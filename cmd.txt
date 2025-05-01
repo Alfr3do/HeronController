@@ -3,3 +3,9 @@ rostopic pub /heron/thrusters/1/input uuv_gazebo_ros_plugins_msgs/FloatStamped '
 rostopic list
 rostopic info /heron/thruster/1/is_on
 rostopic pub /heron/thruster/1/is_on std_msgs/Bool '{data: true}'
+
+
+rosservice call activate_control True
+rostopic info /cmd_drive
+rosmsg info heron_msgs/Drive
+rostopic pub /cmd_drive heron_msgs/Drive "0.0" "1.0"
