@@ -1,1 +1,5 @@
 rostopic pub /heron/thrusters/1/input uuv_gazebo_ros_plugins_msgs/FloatStamped '{header: {seq: 0.0, stamp: {secs: 0.0, nsecs: 0.0}, frame_id: ''}, data: 1000.0}'
+
+rostopic list
+rostopic info /heron/thruster/1/is_on
+rostopic pub /heron/thruster/1/is_on std_msgs/Bool '{data: true}'
